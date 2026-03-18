@@ -34,7 +34,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final state = ref.read(onboardingControllerProvider);
     if (state.isLastPage) {
       await controller.completeOnboarding();
-      if (mounted) context.go(AppRoutes.home);
+      if (mounted) context.go(AppRoutes.login);
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 400),
