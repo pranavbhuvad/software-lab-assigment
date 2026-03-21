@@ -32,11 +32,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _onLogin() async {
     if (!_formKey.currentState!.validate()) return;
-    final success = await ref.read(authControllerProvider.notifier).login(
-          LoginRequest(
-            email: _emailCtrl.text.trim(),
-            password: _passCtrl.text,
-          ),
+    final success = await ref
+        .read(authControllerProvider.notifier)
+        .login(
+          LoginRequest(email: _emailCtrl.text.trim(), password: _passCtrl.text),
         );
     if (success && mounted) context.go(AppRoutes.home);
   }
@@ -47,14 +46,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen(authControllerProvider, (_, next) {
       if (next.hasError && next.error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(next.error!),
-          backgroundColor: Colors.red.shade700,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.r)),
-          margin: EdgeInsets.all(16.w),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error!),
+            backgroundColor: Colors.red.shade700,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            margin: EdgeInsets.all(16.w),
+          ),
+        );
       }
     });
 
@@ -69,20 +71,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               // ── Brand header ──────────────────────────────────
               Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 36.w,
                     height: 36.h,
-                    
-                    child: Icon(Icons.eco_rounded,
-                        color: AppColors.white, size: 20.sp),
+
+                    child: Icon(
+                      Icons.eco_rounded,
+                      color: AppColors.white,
+                      size: 20.sp,
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   Text(
                     'FarmerCats',
                     style: AppTextStyles.body.copyWith(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
                       color: AppColors.textPrimary,
+                      fontFamily: AppTextStyles.fontFamilyBeVietnam,
                     ),
                   ),
                 ],
@@ -110,27 +116,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Title
-                      Text('Welcome back!', style: AppTextStyles.heading),
-                      SizedBox(height: 6.h),
+                      Text(
+                        'Welcome back!',
+                        style: AppTextStyles.heading.copyWith(
+                          fontFamily: AppTextStyles.fontFamilyBeVietnam,
+                          fontSize: 32.sp,
+                          color: AppColors.primaryText,
+                        ),
+                      ),
+                      SizedBox(height: 24.h),
                       Row(
                         children: [
-                          Text('New here? ',
-                              style: AppTextStyles.body
-                                  .copyWith(fontSize: 12.sp)),
+                          Text(
+                            'New here? ',
+                            style: AppTextStyles.body.copyWith(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: AppTextStyles.fontFamilyBeVietnam,
+                            ),
+                          ),
                           GestureDetector(
                             onTap: () => context.go(AppRoutes.register),
                             child: Text(
                               'Create account',
                               style: AppTextStyles.body.copyWith(
-                                fontSize: 12.sp,
+                                fontSize: 14.sp,
                                 color: AppColors.primary,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: AppTextStyles.fontFamilyBeVietnam,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 28.h),
+                      SizedBox(height: 72.h),
 
                       // Email
                       AuthTextField(
@@ -140,35 +159,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                         validator: AppValidators.email,
                       ),
-                      SizedBox(height: 12.h),
+                      SizedBox(height: 24.h),
 
                       // Password row with Forgot? outside on right
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          AuthTextField(
-                            hint: 'Password',
-                            prefixIcon: Icons.lock_outline,
-                            controller: _passCtrl,
-                            isPassword: true,
-                            validator: (v) => v == null || v.isEmpty
-                                ? 'Password is required.'
-                                : null,
-                          ),
-                          SizedBox(height: 6.h),
-                          GestureDetector(
-                            onTap: () =>
-                                context.go(AppRoutes.forgotPassword),
-                            child: Text(
-                              'Forgot?',
-                              style: AppTextStyles.body.copyWith(
-                                fontSize: 12.sp,
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w600,
+                      AuthTextField(
+                        hint: 'Password',
+                        prefixIcon: Icons.lock_outline,
+                        controller: _passCtrl,
+                        isPassword: true,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'Password is required.'
+                            : null,
+
+                        suffixWidget: SizedBox(
+                          width: 70.w, // 👈 control width
+                          child: Padding(
+                             padding: EdgeInsets.only(right: 16.w), 
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: GestureDetector(
+                                onTap: () => context.go(AppRoutes.forgotPassword),
+                                child: Text(
+                                  'Forgot?',
+                                  style: AppTextStyles.body.copyWith(
+                                    fontSize: 14.sp,
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
                       SizedBox(height: 20.h),
 
@@ -185,37 +207,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       SizedBox(height: 20.h),
 
                       // Social buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _SocialBtn(
-                            onTap: () {},
-                            child: Image.network(
-                              'https://www.google.com/favicon.ico',
-                              width: 22.w,
-                              height: 22.h,
-                              errorBuilder: (_, __, ___) => Text('G',
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _SocialBtn(
+                              onTap: () {},
+                              child: Image.network(
+                                'https://www.google.com/favicon.ico',
+                                width: 22.w,
+                                height: 22.h,
+                                errorBuilder: (_, __, ___) => Text(
+                                  'G',
                                   style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w700,
-                                      color: const Color(0xFF4285F4))),
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF4285F4),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 16.w),
-                          _SocialBtn(
-                            onTap: () {},
-                            child: Icon(Icons.apple,
-                                size: 24.sp, color: Colors.black),
-                          ),
-                          SizedBox(width: 16.w),
-                          _SocialBtn(
-                            onTap: () {},
-                            child: Icon(Icons.facebook,
+                            SizedBox(width: 16.w),
+                            _SocialBtn(
+                              onTap: () {},
+                              child: Icon(
+                                Icons.apple,
                                 size: 24.sp,
-                                color: const Color(0xFF1877F2)),
-                          ),
-                        ],
-                      ),
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            _SocialBtn(
+                              onTap: () {},
+                              child: Icon(
+                                Icons.facebook,
+                                size: 24.sp,
+                                color: const Color(0xFF1877F2),
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -230,8 +260,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget _buildDivider() {
     return Row(
       children: [
-        const Expanded(
-            child: Divider(color: Color(0xFFE8E8E8), thickness: 1)),
+        const Expanded(child: Divider(color: Color(0xFFE8E8E8), thickness: 1)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Text(
@@ -242,8 +271,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           ),
         ),
-        const Expanded(
-            child: Divider(color: Color(0xFFE8E8E8), thickness: 1)),
+        const Expanded(child: Divider(color: Color(0xFFE8E8E8), thickness: 1)),
       ],
     );
   }

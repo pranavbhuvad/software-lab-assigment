@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -23,25 +24,33 @@ abstract final class ErrorHandler {
   }
 
   static AppException handleResponse(http.Response response) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      throw StateError('handleResponse called on a success response.');
+    // ── Log raw response for debugging ──────────────────────
+    log('[ERROR RESPONSE] status: ${response.statusCode}');
+    log('[ERROR RESPONSE] body: ${response.body}'); // ← shows real API message
+
+    String message = 'Something went wrong.';
+    try {
+      if (response.body.isNotEmpty) {
+        final json = jsonDecode(response.body);
+        if (json is Map<String, dynamic>) {
+          message =
+              json['message']?.toString() ??
+              json['error']?.toString() ??
+              message;
+        }
+      }
+    } catch (_) {
+      message = 'Server returned status ${response.statusCode}';
     }
 
-    if (response.statusCode == 401) return AppException.unauthorized();
+    if (response.statusCode >= 500) {
+      return AppException.server(response.statusCode, message);
+    }
 
-    final message = _extractMessage(response.body);
-    return AppException.server(response.statusCode, message);
-  }
-
-  static String _extractMessage(String body) {
-    try {
-      final data = jsonDecode(body);
-      if (data is Map<String, dynamic>) {
-        return data['message']?.toString() ??
-            data['error']?.toString() ??
-            'An error occurred.';
-      }
-    } catch (_) {}
-    return 'An error occurred.';
+    return AppException(
+      message: message,
+      statusCode: response.statusCode,
+      errorCode: response.statusCode == 401 ? 'UNAUTHORIZED' : 'REQUEST_ERROR',
+    );
   }
 }

@@ -77,8 +77,15 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Verify OTP', style: AppTextStyles.heading),
-          SizedBox(height: 6.h),
+          SizedBox(height: 58.h),
+          Text('Verify OTP', 
+          style: AppTextStyles.heading.copyWith(
+            fontFamily: AppTextStyles.fontFamilyBeVietnam,
+            fontSize: 32.sp,
+            fontWeight: FontWeight.w700
+          )
+          ),
+          SizedBox(height: 24.h),
           Row(
             children: [
               Text(
@@ -98,7 +105,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
               ),
             ],
           ),
-          SizedBox(height: 28.h),
+          SizedBox(height: 72.h),
 
           // 6 OTP boxes
           Row(
@@ -139,7 +146,7 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
               ),
             ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 32.h),
 
           AuthButton(
             label: 'Submit',
@@ -154,11 +161,11 @@ class _VerifyOtpScreenState extends ConsumerState<VerifyOtpScreen> {
               child: Text(
                 'Resend Code',
                 style: AppTextStyles.body.copyWith(
-                  fontSize: 13.sp,
-                  color: AppColors.primary,
+                  fontSize: 14.sp,
+                  color: AppColors.black,
                   fontWeight: FontWeight.w600,
                   decoration: TextDecoration.underline,
-                  decorationColor: AppColors.primary,
+                  decorationColor: AppColors.black,
                 ),
               ),
             ),

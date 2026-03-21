@@ -4,34 +4,38 @@ import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
-class AuthTextField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final String hint;
   final IconData prefixIcon;
   final bool isPassword;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final Widget? suffixWidget;
+  final void Function(String)? onChanged;
+  final String? initialValue;
 
-  const AuthTextField({
+  const CustomTextField({
     super.key,
     required this.hint,
     required this.prefixIcon,
-    required this.controller,
+    this.controller,
     this.isPassword = false,
     this.validator,
     this.keyboardType = TextInputType.text,
     this.suffixWidget,
+    this.onChanged,
+    this.initialValue,
   });
 
   @override
-  State<AuthTextField> createState() => _AuthTextFieldState();
+  State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _AuthTextFieldState extends State<AuthTextField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   bool _obscure = true;
 
-   List<TextInputFormatter>? get _inputFormatters {
+  List<TextInputFormatter>? get _formatters {
     if (widget.keyboardType == TextInputType.phone) {
       return [
         FilteringTextInputFormatter.digitsOnly,
@@ -41,15 +45,16 @@ class _AuthTextFieldState extends State<AuthTextField> {
     return null;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      inputFormatters: _inputFormatters,
+      initialValue: widget.controller == null ? widget.initialValue : null,
       obscureText: widget.isPassword && _obscure,
       validator: widget.validator,
       keyboardType: widget.keyboardType,
+      inputFormatters: _formatters,
+      onChanged: widget.onChanged,
       style: AppTextStyles.body.copyWith(
         color: AppColors.textPrimary,
         fontSize: 13.sp,
@@ -57,22 +62,20 @@ class _AuthTextFieldState extends State<AuthTextField> {
       decoration: InputDecoration(
         hintText: widget.hint,
         hintStyle: AppTextStyles.body.copyWith(
-          color: Color.fromRGBO(0, 0, 0, 0.3),
-          fontSize: 14.sp,
-          fontFamily: AppTextStyles.fontFamilyBeVietnam,
-          fontWeight: FontWeight.w400
+          color: AppColors.textHint,
+          fontSize: 13.sp,
+          fontWeight: FontWeight.w400,
         ),
         prefixIcon: Padding(
           padding: EdgeInsets.symmetric(horizontal: 14.w),
           child: Icon(
             widget.prefixIcon,
             size: 15.sp,
-            color: AppColors.primaryText,
+            color: AppColors.black
           ),
         ),
         prefixIconConstraints: BoxConstraints(minWidth: 44.w, minHeight: 0),
-        suffixIcon:
-            widget.suffixWidget ??
+        suffixIcon: widget.suffixWidget ??
             (widget.isPassword
                 ? GestureDetector(
                     onTap: () => setState(() => _obscure = !_obscure),
@@ -83,22 +86,16 @@ class _AuthTextFieldState extends State<AuthTextField> {
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
                         size: 18.sp,
-                        color: const Color(0xFFBBBBBB),
+                        color: AppColors.textHint,
                       ),
                     ),
                   )
                 : null),
-        suffixIconConstraints: BoxConstraints(
-          minWidth: 80.w, // ✅ increase space for "Forgot?"
-          minHeight: 0,
-        ),
+        suffixIconConstraints: BoxConstraints(minWidth: 44.w, minHeight: 0),
         filled: true,
-        fillColor: const Color(0xFFF5F5F5),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 12.w, // ✅ give text breathing space
-          vertical: 15.h,
-        ),
-        // No visible border — clean Figma look
+        fillColor: AppColors.inputFill,
+        contentPadding:
+            EdgeInsets.symmetric(horizontal: 12.w, vertical: 15.h),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide.none,
@@ -116,11 +113,11 @@ class _AuthTextFieldState extends State<AuthTextField> {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Color(0xFFE53935), width: 1),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Color(0xFFE53935), width: 1.2),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.2),
         ),
         errorStyle: TextStyle(fontSize: 10.sp),
       ),

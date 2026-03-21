@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 import 'package:go_router/go_router.dart';
+import 'package:software_lab/features/auth/presentation/widgets/auth_card.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../domain/models/auth_models.dart';
 import '../../infra/controllers/auth_controller.dart';
 import '../widgets/auth_button.dart';
-import '../widgets/auth_card.dart';
+
 import '../widgets/auth_text_field.dart';
 
 class ResetPasswordScreen extends ConsumerStatefulWidget {
@@ -75,8 +76,16 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Reset Password', style: AppTextStyles.heading),
-            SizedBox(height: 6.h),
+            SizedBox(height: 58.h,),
+            Text('Reset Password', 
+            style: AppTextStyles.heading.copyWith(
+              fontWeight: FontWeight.w700,
+              fontSize: 32.sp,
+              fontFamily: AppTextStyles.fontFamilyBeVietnam,
+              color: AppColors.primaryText
+            )
+            ),
+            SizedBox(height: 28.h),
             Row(
               children: [
                 Text(
@@ -96,7 +105,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 28.h),
+            SizedBox(height: 72.h),
 
             AuthTextField(
               hint: 'New Password',
@@ -109,7 +118,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 return null;
               },
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 24.h),
 
             AuthTextField(
               hint: 'Confirm New Password',
@@ -122,7 +131,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                 return null;
               },
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 32.h),
 
             AuthButton(
               label: 'Submit',

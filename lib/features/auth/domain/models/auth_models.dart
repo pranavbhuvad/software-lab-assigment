@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class LoginRequest {
   final String email;
   final String password;
@@ -53,7 +55,7 @@ class RegisterRequest {
     this.state,
     this.zipCode,
     this.deviceToken,
-    this.type = 'email',
+    this.type = 'email', File? registrationProof, required Map<String, List<String>> businessHours, required socialId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -129,6 +131,50 @@ class AuthUser {
       phone: data['phone']?.toString() ?? '',
       role: data['role']?.toString() ?? '',
       token: data['token']?.toString() ?? '',
+    );
+  }
+
+  get message => null;
+}
+
+class SignupState {
+  final int step;
+  final bool isLoading;
+  final String? error;
+  final bool isSuccess;
+  final Map<String, dynamic> formData;
+  final File? proofFile;
+  final Map<String, List<String>> businessHours;
+ 
+  const SignupState({
+    this.step = 0,
+    this.isLoading = false,
+    this.error,
+    this.isSuccess = false,
+    this.formData = const {},
+    this.proofFile,
+    this.businessHours = const {},
+  });
+ 
+  SignupState copyWith({
+    int? step,
+    bool? isLoading,
+    String? error,
+    bool clearError = false,
+    bool? isSuccess,
+    Map<String, dynamic>? formData,
+    File? proofFile,
+    bool clearProof = false,
+    Map<String, List<String>>? businessHours,
+  }) {
+    return SignupState(
+      step: step ?? this.step,
+      isLoading: isLoading ?? this.isLoading,
+      error: clearError ? null : error ?? this.error,
+      isSuccess: isSuccess ?? this.isSuccess,
+      formData: formData ?? this.formData,
+      proofFile: clearProof ? null : proofFile ?? this.proofFile,
+      businessHours: businessHours ?? this.businessHours,
     );
   }
 }

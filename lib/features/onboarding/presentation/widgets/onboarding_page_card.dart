@@ -65,21 +65,32 @@ class OnboardingPageCard extends StatelessWidget {
               children: [
                 Text(
                   item.title,
-                  style: AppTextStyles.heading,
+                  style: AppTextStyles.heading.copyWith(
+                    fontFamily: AppTextStyles.fontFamilyBeVietnam,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.black,
+                    fontSize: 24.sp
+                  ),  
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 12.h),
                 Text(
                   item.description,
-                  style: AppTextStyles.body,
+                  style: AppTextStyles.body.copyWith(
+                    fontFamily: AppTextStyles.fontFamilyBeVietnam,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14.sp,
+                    color: AppColors.primaryText
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 47.h),
+                SizedBox(height: 32.h),
                 DotIndicator(
                   count: totalCount,
                   activeIndex: currentIndex,
                 ),
-                SizedBox(height: 60.h),
+                Spacer(),
+                // SizedBox(height: 60.h),
                 OnboardingCtaButton(
                   color: item.ctaColor,
                   onTap: onCtaTap,
@@ -90,10 +101,17 @@ class OnboardingPageCard extends StatelessWidget {
                   onTap: onLoginTap,
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 4.h),
-                    child: Text('Login', style: AppTextStyles.login),
+                    child: Text('Login', 
+                    style: AppTextStyles.login.copyWith(
+                      fontFamily: AppTextStyles.fontFamilyBeVietnam,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: AppColors.primaryText
+                    )
+                  ),
                   ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 45.h),
               ],
             ),
           ),

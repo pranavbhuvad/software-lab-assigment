@@ -33,7 +33,7 @@ class AuthButton extends StatelessWidget {
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             // Pill shape — matches Figma exactly
-            borderRadius: BorderRadius.circular(30.r),
+            borderRadius: BorderRadius.circular(117.r),
           ),
         ),
         child: isLoading
